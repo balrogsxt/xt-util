@@ -1,0 +1,10 @@
+.idea
+.vscode
+.history
+.run
+.DS_Store
+*.log
+log/
+go.sum
+*.xdb
+*.xlsx
