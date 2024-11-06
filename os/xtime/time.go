@@ -63,7 +63,7 @@ func (l *Time) String() string {
 	if l.IsZero() {
 		return ""
 	}
-	return l.Format(time.DateTime)
+	return l.wrapper.Format(time.DateTime)
 }
 
 // Time 获取原生time.Time

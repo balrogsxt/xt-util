@@ -14,4 +14,6 @@ func TestTime(t *testing.T) {
 		"h": "时",
 		"d": "", //隐藏天
 	}))
+	t.Logf("%s", time.Now())
+	t.Logf("%s", Now())
 }
