@@ -1,10 +1,10 @@
-package ytime
+package xtime
 
 import (
 	"bytes"
 	"fmt"
-	ystr "github.com/balrogsxt/yuki-tools/str"
-	yvar "github.com/balrogsxt/yuki-tools/var"
+	"github.com/balrogsxt/xt-util/text/xstr"
+	"github.com/balrogsxt/xt-util/xvar"
 	"strconv"
 	"strings"
 	"time"
@@ -32,7 +32,7 @@ func New(ts ...any) *Time {
 			return newTime(tp, nil)
 		case uint, uint32, uint64, int, int32, int64:
 			//判断是否是毫秒级时间戳
-			timestamp := yvar.New(tp).Int64()
+			timestamp := xvar.New(tp).Int64()
 			if timestamp > 1e12 {
 				t = time.Unix(timestamp/1000, timestamp%1000)
 			} else {
@@ -91,7 +91,7 @@ func (l *Time) Format(format string) string {
 		case "s": //秒，带前导零（00 到 59）
 			buffer.WriteString(fmt.Sprintf("%02d", l.t.Second()))
 		case "D": //星期几的文本表示（用三个字母表示）
-			buffer.WriteString(ystr.Substr(l.t.Weekday().String(), 0, 3))
+			buffer.WriteString(xstr.Substr(l.t.Weekday().String(), 0, 3))
 		case "l": //星期几的完整的文本表示
 			buffer.WriteString(l.t.Weekday().String())
 		case "j": //一个月中的第几天，不带前导零（1 到 31）
@@ -109,7 +109,7 @@ func (l *Time) Format(format string) string {
 		case "F": //月份的完整的文本表示（January[一月份] 到 December[十二月份]）
 			buffer.WriteString(l.t.Month().String())
 		case "M": //月份的短文本表示（用三个字母表示）
-			buffer.WriteString(ystr.Substr(l.t.Month().String(), 0, 3))
+			buffer.WriteString(xstr.Substr(l.t.Month().String(), 0, 3))
 		case "n": //月份的数字表示，不带前导零（1 到 12）
 			buffer.WriteString(strconv.Itoa(int(l.t.Month())))
 		case "t": //给定月份中包含的天数

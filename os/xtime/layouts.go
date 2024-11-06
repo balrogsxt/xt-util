@@ -1,4 +1,4 @@
-package ytime
+package xtime
 
 import "time"
 
