@@ -15,3 +15,9 @@ func IsRegex(pattern string, value string) bool {
 func IsEmpty(s string) bool {
 	return len(strings.Trim(s, " ")) == 0
 }
+
+// IsEmail 判断是否是邮箱
+func IsEmail(s string) bool {
+	has, _ := regexp.MatchString("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", s)
+	return has
+}
