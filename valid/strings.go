@@ -21,3 +21,8 @@ func IsEmail(s string) bool {
 	has, _ := regexp.MatchString("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", s)
 	return has
 }
+
+// IsChineseText 是否全部由中文汉字组成
+func IsChineseText(str string) bool {
+	return IsRegex("^[\u4e00-\u9fa5\\s]+$", str)
+}
