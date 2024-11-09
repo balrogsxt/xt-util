@@ -3,8 +3,8 @@ package xtime
 import (
 	"bytes"
 	"fmt"
+	"github.com/balrogsxt/xt-util/standard/xstr"
 	"github.com/balrogsxt/xt-util/standard/xvar"
-	"github.com/balrogsxt/xt-util/text/xstr"
 	"strconv"
 	"strings"
 	"time"
