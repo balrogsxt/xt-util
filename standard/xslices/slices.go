@@ -1,5 +1,7 @@
 package xslices
 
+import "slices"
+
 // DropDuplicate 删除重复项
 func DropDuplicate[T comparable](s []T) []T {
 	if len(s) == 0 {
@@ -14,4 +16,8 @@ func DropDuplicate[T comparable](s []T) []T {
 		}
 	}
 	return ret
+}
+
+func Contains[S ~[]E, E comparable](s S, v E) bool {
+	return slices.Contains(s, v)
 }

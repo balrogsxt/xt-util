@@ -16,4 +16,16 @@ func TestTime(t *testing.T) {
 	}))
 	t.Logf("%s", time.Now())
 	t.Logf("%s", Now())
+
+	t.Log(New(Now().Format("Y-m-d 22:00:00")).Unix())
+}
+
+func TestLocalTime(t *testing.T) {
+	//mongodb utc time转换为本地时间
+
+	utc := time.Now().In(time.UTC)
+	t.Log(utc.Format(time.DateTime))
+
+	t.Log(NewLocal(utc).Format(time.DateTime))
+
 }

@@ -3,6 +3,7 @@ package xtime
 import (
 	"bytes"
 	"fmt"
+	"github.com/balrogsxt/xt-util/standard/xslices"
 	"github.com/balrogsxt/xt-util/standard/xstr"
 	"github.com/balrogsxt/xt-util/standard/xvar"
 	"strconv"
@@ -14,6 +15,11 @@ type Time struct {
 	wrapper
 }
 
+func NewLocal(ts ...any) *Time {
+	t := New(ts...)
+	t.wrapper.Time = t.In(time.Local)
+	return t
+}
 func Now() *Time {
 	return New()
 }
@@ -73,6 +79,10 @@ func (l *Time) Time() time.Time {
 
 // Format 格式化时间,支持部分php常见格式化
 func (l *Time) Format(format string) string {
+	//如果是系统设定好的格式
+	if xslices.Contains(formatLayouts, format) {
+		return l.wrapper.Format(format)
+	}
 	//支持按照php方式调用Y-m-d H:i:s
 	strs := strings.Split(format, "")
 	buffer := bytes.NewBuffer(nil)
