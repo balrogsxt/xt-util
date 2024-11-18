@@ -29,3 +29,12 @@ func TestLocalTime(t *testing.T) {
 	t.Log(NewLocal(utc).Format(time.DateTime))
 
 }
+
+func TestLastWeekTime(t *testing.T) {
+	t.Logf("上上周开始: %s", Now().WeekFirst(-2).Format(time.DateTime))
+	t.Logf("上周开始: %s", Now().WeekFirst(-1).Format(time.DateTime))
+	t.Logf("本周开始: %s", Now().WeekFirst().Format(time.DateTime))
+	t.Logf("本周结束: %s", Now().WeekLast().Format(time.DateTime))
+	t.Logf("下周结束: %s", Now().WeekLast(1).Format(time.RFC3339Nano))
+	t.Logf("下下周结束: %s", Now().WeekLast(2).Format(time.RFC3339Nano))
+}

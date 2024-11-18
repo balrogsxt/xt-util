@@ -30,8 +30,12 @@ func (l *Time) TodayLast() *Time {
 }
 
 // WeekFirst 本周第一天时间
-func (l *Time) WeekFirst() *Time {
-	now := time.Now()
+func (l *Time) WeekFirst(weeks ...int) *Time {
+	week := 0
+	if len(weeks) > 0 {
+		week = weeks[0]
+	}
+	now := l.wrapper
 	weekday := now.Weekday()
 	var daysToSubtract int
 	if weekday == time.Sunday { //如果是星期天
@@ -39,12 +43,12 @@ func (l *Time) WeekFirst() *Time {
 	} else {
 		daysToSubtract = int(weekday) - 1
 	}
-	d := now.AddDate(0, 0, -daysToSubtract)
+	d := now.AddDate(0, 0, -daysToSubtract+week*7)
 	return New(time.Date(d.Year(), d.Month(), d.Day(), 0, 0, 0, 0, d.Location()))
 }
 
 // WeekLast 获取本周最后一天时间
-func (l *Time) WeekLast() *Time {
-	t := l.WeekFirst().AddDate(0, 0, 7).Add(-time.Millisecond)
+func (l *Time) WeekLast(weeks ...int) *Time {
+	t := l.WeekFirst(weeks...).AddDate(0, 0, 7).Add(-time.Millisecond)
 	return New(t)
 }
