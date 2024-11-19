@@ -42,8 +42,8 @@ func (l *Var) Float64() float64 {
 	v, _ := strconv.ParseFloat(l.String(), 64)
 	return v
 }
-func (l *Var) Uint() int {
-	return int(l.Uint64())
+func (l *Var) Uint() uint {
+	return uint(l.Uint64())
 }
 func (l *Var) Uint8() uint {
 	v, _ := strconv.ParseUint(l.String(), 10, 8)
