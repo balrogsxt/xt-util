@@ -1,6 +1,9 @@
 package xjson
 
-import jsoniter "github.com/json-iterator/go"
+import (
+	jsoniter "github.com/json-iterator/go"
+	"io"
+)
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
@@ -22,6 +25,9 @@ func UnmarshalByString(str string, v interface{}) error {
 }
 func Unmarshal(bytes []byte, v interface{}) error {
 	return json.Unmarshal(bytes, v)
+}
+func NewDecoder(reader io.Reader) *jsoniter.Decoder {
+	return json.NewDecoder(reader)
 }
 func Get(str string, path ...interface{}) jsoniter.Any {
 	return json.Get([]byte(str), path...)
