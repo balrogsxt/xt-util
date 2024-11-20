@@ -1,6 +1,8 @@
 package xnumber
 
-import "math"
+import (
+	"math"
+)
 
 // RoundFloat 四舍五入到小数点 后 n 位
 func RoundFloat(f float64, n int) float64 {
