@@ -1,6 +1,7 @@
 package xfile
 
 import (
+	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -98,4 +99,45 @@ func Delete(path string) error {
 		return nil
 	}
 	return os.RemoveAll(path)
+}
+func Base(path string) string {
+	return filepath.Base(path)
+}
+func Ext(path string) string {
+	return filepath.Ext(path)
+}
+
+// ScanFiles 获取目录下所有文件
+func ScanFiles(path string, pattern string, callback func(path string, d fs.DirEntry) bool, isRecursives ...bool) ([]string, error) {
+	isRecursive := false
+	if len(isRecursives) > 0 {
+		isRecursive = isRecursives[0]
+	}
+	files := make([]string, 0)
+	p := filepath.Dir(path)
+	if err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if !isRecursive { //跳过子目录
+			if d.IsDir() && filepath.Dir(path) != filepath.Clean(p) {
+				return filepath.SkipDir
+			}
+		}
+		if !d.IsDir() {
+			if matched, _ := filepath.Match(pattern, Base(path)); matched {
+				if callback != nil {
+					if callback(path, d) {
+						files = append(files, path)
+					}
+				} else {
+					files = append(files, path)
+				}
+			}
+		}
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+	return files, nil
 }
