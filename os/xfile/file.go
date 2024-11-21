@@ -1,6 +1,7 @@
 package xfile
 
 import (
+	"github.com/balrogsxt/xt-util/valid"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -125,14 +126,18 @@ func ScanFiles(path string, pattern string, callback func(path string, d fs.DirE
 			}
 		}
 		if !d.IsDir() {
-			if matched, _ := filepath.Match(pattern, Base(path)); matched {
-				if callback != nil {
-					if callback(path, d) {
-						files = append(files, path)
+			isAppend := true
+			if !valid.IsEmpty(pattern) {
+				if matched, _ := filepath.Match(pattern, Base(path)); matched {
+					if callback != nil {
+						isAppend = callback(path, d)
+					} else {
+						isAppend = false
 					}
-				} else {
-					files = append(files, path)
 				}
+			}
+			if isAppend {
+				files = append(files, path)
 			}
 		}
 		return nil
