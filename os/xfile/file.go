@@ -109,6 +109,7 @@ func Ext(path string) string {
 }
 
 // ScanFiles 获取目录下所有文件
+// Deprecated: 此函数已弃用,换xfile.ScanFile替代
 func ScanFiles(path string, pattern string, callback func(path string, d fs.DirEntry) bool, isRecursives ...bool) ([]string, error) {
 	isRecursive := false
 	if len(isRecursives) > 0 {

@@ -14,3 +14,12 @@ func Md5String(v string) string {
 	}
 	return ""
 }
+
+func Md5Byte(v []byte) string {
+	if len(v) > 0 {
+		h := md5.New()
+		h.Write(v)
+		return fmt.Sprintf("%x", h.Sum(nil))
+	}
+	return ""
+}

@@ -58,8 +58,13 @@ func (w *WeightRandomRoundRobin[T]) Remove(v T) *WeightRandomRoundRobin[T] {
 		if item == v {
 			w.items = append(w.items[:i], w.items[i+1:]...)
 			w.weights = append(w.weights[:i], w.weights[i+1:]...)
-			w.cumWeights = w.cumulativeWeights(w.weights)
-			w.totalWeight = w.cumWeights[len(w.cumWeights)-1]
+			if len(w.weights) > 0 {
+				w.cumWeights = w.cumulativeWeights(w.weights)
+				w.totalWeight = w.cumWeights[len(w.cumWeights)-1]
+			} else {
+				w.cumWeights = nil
+				w.totalWeight = 0
+			}
 			break
 		}
 	}
