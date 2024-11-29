@@ -2,6 +2,7 @@ package xfile
 
 import (
 	"github.com/balrogsxt/xt-util/valid"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -11,24 +12,26 @@ import (
 
 // IsDir 判断文件夹是否存在
 func IsDir(path string) bool {
-	info, err := os.Stat(path)
-	if os.IsNotExist(err) {
+	info, err := Stat(path)
+	if err != nil {
 		return false
 	}
 	return info.IsDir()
 }
+func Stat(path string) (os.FileInfo, error) {
+	return os.Stat(path)
+}
 
 // IsFile 判断文件是否存在
 func IsFile(path string) bool {
-	if _, err := os.Stat(path); err != nil {
-		if os.IsNotExist(err) {
-			return false
-		}
+	info, err := Stat(path)
+	if err != nil {
+		return false
 	}
-	return true
+	return !info.IsDir()
 }
 func Exists(path string) bool {
-	if stat, err := os.Stat(path); stat != nil && !os.IsNotExist(err) {
+	if stat, err := Stat(path); stat != nil && !os.IsNotExist(err) {
 		return true
 	}
 	return false
@@ -146,4 +149,56 @@ func ScanFiles(path string, pattern string, callback func(path string, d fs.DirE
 		return nil, err
 	}
 	return files, nil
+}
+
+func Move(oldPath, newPath string) error {
+	return os.Rename(oldPath, newPath)
+}
+
+func RemoveFile(path string) error {
+	return os.Remove(path)
+}
+func RemoveAll(path string) error {
+	return os.RemoveAll(path)
+}
+
+// CopyDir 复制文件夹下的所有文件
+func CopyDir(src string, dst string) error {
+	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		relPath, err := filepath.Rel(src, path)
+		if err != nil {
+			return err
+		}
+		dstPath := filepath.Join(dst, relPath)
+		if info.IsDir() {
+			return os.MkdirAll(dstPath, info.Mode())
+		}
+		return CopyFile(path, dstPath)
+	})
+}
+
+// CopyFile 复制文件
+func CopyFile(src, dst string) error {
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+	dstFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+	_, err = io.Copy(dstFile, srcFile)
+	if err != nil {
+		return err
+	}
+	info, err := srcFile.Stat()
+	if err != nil {
+		return err
+	}
+	return dstFile.Chmod(info.Mode())
 }
