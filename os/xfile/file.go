@@ -1,6 +1,7 @@
 package xfile
 
 import (
+	"github.com/balrogsxt/xt-util/encoding/xjson"
 	"github.com/balrogsxt/xt-util/valid"
 	"io"
 	"io/fs"
@@ -201,4 +202,22 @@ func CopyFile(src, dst string) error {
 		return err
 	}
 	return dstFile.Chmod(info.Mode())
+}
+
+// GetFileToJson 读取文件转为JSON结构体
+func GetFileToJson(file string, v any) error {
+	res, err := GetBytes(file)
+	if err != nil {
+		return err
+	}
+	return xjson.Unmarshal(res, v)
+}
+
+// PutContentJson 格式化写入JSON格式
+func PutContentJson(file string, v any) error {
+	res, err := xjson.MarshalByte(v)
+	if err != nil {
+		return err
+	}
+	return PutBytes(file, res)
 }
